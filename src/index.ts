@@ -23,26 +23,27 @@ const io = new Server(httpServer, {
     },
 });
 
-let users = {} as any;
+let onlineUsers = {} as any;
 
 io.on("connection", (socket) => {
-
     socket.on("register", (userId) => {
-        users[userId] = socket.id;
+        onlineUsers[userId] = socket.id;
         console.log(`User registered: ${userId} -> ${socket.id}`);
+        io.emit("updateOnlineUsers", Object.keys(onlineUsers));
     });
   
     socket.on("privateMessage", ({ senderId, receiverId, message }) => {
-    const receiverSocketId = users[receiverId]; // Get recipient's socket ID
+    const receiverSocketId = onlineUsers[receiverId]; // Get recipient's socket ID
     if (receiverSocketId) {
       io.to(receiverSocketId).emit("receiveMessage", { senderId, message });
     }
   });
-  
-  socket.on("disconnect", () => {
-    const userId = Object.keys(users).find((key) => users[key] === socket.id);
-    if (userId) delete users[userId]; // Remove user from active list
+
+  socket.on("logout", (userId) => {
+    delete onlineUsers[userId]; // Remove user from online list
     console.log(`❌: User ${socket.id} disconnected`);
+    io.emit("updateOnlineUsers", Object.keys(onlineUsers)); // Notify all clients
+    socket.disconnect(); // Manually disconnect the socket
   });
 });
 
