@@ -32,10 +32,10 @@ io.on("connection", (socket) => {
         io.emit("updateOnlineUsers", Object.keys(onlineUsers));
     });
   
-    socket.on("privateMessage", ({ senderId, receiverId, message }) => {
+    socket.on("privateMessage", ({ senderId, receiverId, encryptedMessage, iv }) => {
     const receiverSocketId = onlineUsers[receiverId]; // Get recipient's socket ID
     if (receiverSocketId) {
-      io.to(receiverSocketId).emit("receiveMessage", { senderId, message });
+      io.to(receiverSocketId).emit("receiveMessage", { senderId, encryptedMessage, iv });
     }
   });
 
