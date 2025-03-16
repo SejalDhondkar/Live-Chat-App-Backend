@@ -28,7 +28,7 @@ let onlineUsers = {} as any;
 io.on("connection", (socket) => {
     socket.on("register", (userId) => {
         onlineUsers[userId] = socket.id;
-        console.log(`User registered: ${userId} -> ${socket.id}`);
+        // console.log(`User registered: ${userId} -> ${socket.id}`);
         io.emit("updateOnlineUsers", Object.keys(onlineUsers));
     });
   
@@ -41,7 +41,7 @@ io.on("connection", (socket) => {
 
   socket.on("logout", (userId) => {
     delete onlineUsers[userId]; // Remove user from online list
-    console.log(`❌: User ${socket.id} disconnected`);
+    // console.log(`❌: User ${socket.id} disconnected`);
     io.emit("updateOnlineUsers", Object.keys(onlineUsers)); // Notify all clients
     socket.disconnect(); // Manually disconnect the socket
   });
