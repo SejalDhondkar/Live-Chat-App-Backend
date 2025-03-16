@@ -18,7 +18,7 @@ const httpServer = createServer(app);
 
 const io = new Server(httpServer, {
     cors: {
-      origin: "http://localhost:5173", // Update this with your frontend URL
+      origin: APP_ORIGIN, // Update this with your frontend URL
       methods: ["GET", "POST"],
     },
 });

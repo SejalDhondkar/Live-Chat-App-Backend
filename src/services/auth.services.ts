@@ -30,6 +30,7 @@ export const createAccount = async (data: CreateAccountParams) => {
     // create user
     const user = await UserModel.create({
         email: data.email,
+        username: data.username,
         password: data.password,
     });
 

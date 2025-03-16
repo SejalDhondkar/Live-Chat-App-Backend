@@ -6,6 +6,8 @@ import { registerSchema, loginSchema, verificationCodeSchema, emailSchema, reset
 import { verifyToken } from "../utils/jwt";
 import SessionModel from "../models/session.model";
 import appAssert from "../utils/appAssert";
+import UserModel from "../models/user.model";
+
 
 
 export const registerHandler = catchErrors(async (req, res) => {
@@ -107,4 +109,18 @@ export const ResetPasswordHandler = catchErrors(async(req,res)=>{
     return clearAuthCookies(res).status(OK).json({
         message: 'Password reset successfully'
     });
+});
+
+export const checkUsernameHandler = catchErrors(async(req,res)=>{
+    const {username} = req.body;
+
+    const checkUser = await UserModel.findOne({
+        username: username
+    });
+
+    if(checkUser) {
+        return res.status(200).json({message:'Username is not available'});
+    }
+
+    return res.status(200).json({message:'Username is available'});
 });
