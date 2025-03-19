@@ -5,10 +5,12 @@ import { fifteenMunitesFromNow, thirtyDaysFromNow } from "./date";
 
 const secure = NODE_ENV !== 'development';
 
+const sameSite = NODE_ENV === 'development' ? 'strict' : 'none';
+
 export const REFRESH_PATH = '/auth/refresh';
 
 const defaults: CookieOptions = {
-    sameSite: "strict",
+    sameSite,
     httpOnly: true,
     secure
 };
